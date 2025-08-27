@@ -1,5 +1,6 @@
 import rideOversight from "@/pages/adminpages/rideOversight";
 import userManagement from "@/pages/adminpages/userManagement";
+import profile from "@/pages/profile";
 import type { IsidebarItems } from "@/types";
 
 export const adminSidebarItems:IsidebarItems[] =  [
@@ -20,6 +21,11 @@ export const adminSidebarItems:IsidebarItems[] =  [
           title: "Ride oversight",
           url: "/admin/rideOversight",
           component:rideOversight
+        },
+        {
+          title: "Profile",
+          url: "/admin/profile",
+          component:profile
         },
       ],
     },

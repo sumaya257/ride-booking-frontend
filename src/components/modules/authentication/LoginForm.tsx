@@ -53,7 +53,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
       } else if (user.role === "rider") {
         navigate("/rider/dashboard");
       } else if (user.role === "admin") {
-        navigate("/admin/dashboard");
+        navigate("/admin/analytics");
       }
     } catch (err: any) {
       setServerError(err?.data?.message ?? "Login failed. Please try again.");

@@ -6,15 +6,39 @@ import RegisterPage from "@/pages/Register";
 import { generateRoutes } from "@/utils/generateRoutes";
 import { createBrowserRouter } from "react-router";
 import { adminSidebarItems } from "./adminSidebarItems";
+import { driverSidebarItems } from "./driverSidebarItems";
+import { riderSidebarItems } from "./riderSidebar";
+import Home from "@/pages/Home";
+import Features from "@/pages/Features";
+import Contact from "@/pages/Contact";
+import FAQ from "@/pages/FAQ";
 
 export const router = createBrowserRouter([
   {
     path: "/",
     Component: App,
-    children:[{
-        path: "about-us",
+    children:[
+      {
+        path: '/',
+        Component: Home,
+    },  
+    {
+        path: "about",
         Component: About,
-    }
+    },
+    {
+        path: "features",
+        Component: Features,
+    },
+    {
+        path: "contact",
+        Component: Contact,
+    },
+    {
+        path: "faq",
+        Component: FAQ,
+    },
+
     ]
   },
 
@@ -22,6 +46,18 @@ export const router = createBrowserRouter([
     path: "/admin",
     Component: DashboardLayout,
     children:[...generateRoutes(adminSidebarItems)]
+  },
+
+  {
+    path: "/driver",
+    Component: DashboardLayout,
+    children:[...generateRoutes(driverSidebarItems)]
+  },
+
+  {
+    path: "/rider",
+    Component: DashboardLayout,
+    children:[...generateRoutes(riderSidebarItems)]
   },
 
   {
