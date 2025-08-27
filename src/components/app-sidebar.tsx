@@ -1,4 +1,4 @@
-import * as React from "react"
+import * as React from "react";
 import {
   Sidebar,
   SidebarContent,
@@ -10,37 +10,40 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
-} from "@/components/ui/sidebar"
-import Logo from "@/assets/icons/logo"
-import { Link } from "react-router"
-import { getSidebarItems } from "@/utils/getSidebarItems"
-import { useSelector } from "react-redux"
-import { selectCurrentUser } from "@/redux/features/auth/auth.slice"
-
+} from "@/components/ui/sidebar";
+import Logo from "@/assets/icons/logo";
+import { Link } from "react-router";
+import { getSidebarItems } from "@/utils/getSidebarItems";
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "@/redux/features/auth/auth.slice";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const user = useSelector(selectCurrentUser);
-  console.log(user?.role)
-  const data={
-    navMain: getSidebarItems(user?.role ?? "rider")
-  }
+  console.log(user?.role);
+  const data = {
+    navMain: getSidebarItems(user?.role ?? "rider"),
+  };
 
   return (
-    <Sidebar {...props}>
+    <Sidebar
+      {...props}
+      className="" // Increase sidebar width (default might be 64)
+    >
       <SidebarHeader>
-      <Logo/>
+        <div className="flex justify-center pt-4">
+          <Logo />
+        </div>
       </SidebarHeader>
       <SidebarContent>
-        {/* We create a SidebarGroup for each parent. */}
         {data.navMain.map((item) => (
           <SidebarGroup key={item.title}>
-            <SidebarGroupLabel>{item.title}</SidebarGroupLabel>
+            <SidebarGroupLabel className="flex justify-center mb-2">{item.title}</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
                 {item.items.map((item) => (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild>
-                      <Link to={item.url}>{item.title}</Link>
+                      <Link to={item.url} className="flex justify-center">{item.title}</Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 ))}
@@ -51,5 +54,5 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarContent>
       <SidebarRail />
     </Sidebar>
-  )
+  );
 }
