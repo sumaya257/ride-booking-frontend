@@ -1,3 +1,5 @@
+// rider.types.ts
+
 export interface Location {
   address: string;
   lat: number;
@@ -5,16 +7,27 @@ export interface Location {
 }
 
 export interface Ride {
-  id: string;
+  _id: string; 
+  rider: string;
+  driver: {
+    _id: string;
+    name: string;
+  } | null; // can be null
   pickupLocation: Location;
   destinationLocation: Location;
   fare: number;
+  distance?: number;
   status: 'requested' | 'picked_up' | 'in_transit' | 'completed' | 'cancelled';
-  driver?: {
-    id: string;
-    name: string;
+  canceledBy?: string | null;
+  timestamps: {
+    requestedAt?: string;
+    pickedUpAt?: string;
+    completedAt?: string;
+    cancelledAt?: string;
   };
   createdAt: string;
+  updatedAt: string;
+  __v?: number;
 }
 
 export interface RideRequestPayload {

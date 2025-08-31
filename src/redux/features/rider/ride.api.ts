@@ -1,22 +1,23 @@
-import axios from "axios";
-import { RideRequestPayload, Ride } from "./rider.types"
+// ride.api.ts
+import type { Ride, RideRequestPayload } from "./rider.types";
+import axiosInstance from "@/lib/axiosInstance";
 
-const api = axios.create({
-  baseURL: "/api/rides", // adjust if needed
-  withCredentials: true, // for JWT cookies if used
-});
+const basePath = "/rides";
 
-export const requestRide = async (data: RideRequestPayload) => {
-  const res = await api.post<Ride>("/request", data);
-  return res.data;
+// Request a ride
+export const requestRide = async (data: RideRequestPayload): Promise<{ message: string; ride: Ride }> => {
+  const res = await axiosInstance.post<{ message: string; ride: Ride }>(`${basePath}/request`, data);
+  return res.data; // TS now knows response has 'ride'
 };
 
-export const getRideHistory = async () => {
-  const res = await api.get<Ride[]>("/me");
-  return res.data;
+// Get ride history
+export const getRideHistory = async (): Promise<{ rides: Ride[] }> => {
+  const res = await axiosInstance.get<{ rides: Ride[] }>(`${basePath}/me`);
+  return res.data; // TS now knows response has 'rides'
 };
 
-export const cancelRide = async (id: string) => {
-  const res = await api.patch<Ride>(`/${id}/cancel`);
+// Cancel ride
+export const cancelRide = async (id: string): Promise<Ride> => {
+  const res = await axiosInstance.patch<Ride>(`${basePath}/${id}/cancel`);
   return res.data;
 };
