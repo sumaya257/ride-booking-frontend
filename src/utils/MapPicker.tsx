@@ -1,65 +1,36 @@
-import { useState} from "react";
-import { GoogleMap, Marker, useLoadScript, Autocomplete } from "@react-google-maps/api";
-import type { Location } from "@/redux/features/rider/rider.types";
+import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
+import { useState } from "react";
+import "leaflet/dist/leaflet.css";
 
 interface MapPickerProps {
-  onSelectLocation: (loc: Location, type: "pickup" | "destination") => void;
+  onSelect: (lat: number, lng: number) => void;
 }
 
-const libraries: ("places")[] = ["places"];
-const mapContainerStyle = { width: "100%", height: "300px" };
-const center = { lat: 23.8103, lng: 90.4125 }; // Dhaka default
+const MapPicker: React.FC<MapPickerProps> = ({ onSelect }) => {
+  const [position, setPosition] = useState<[number, number] | null>(null);
 
-export const MapPicker = ({ onSelectLocation }: MapPickerProps) => {
-  const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY as string,
-    libraries,
-  });
-
-  const [pickupMarker, setPickupMarker] = useState<Location | null>(null);
-  const [destMarker, setDestMarker] = useState<Location | null>(null);
-
-  const handlePlaceSelect = (place: google.maps.places.PlaceResult, type: "pickup" | "destination") => {
-    if (!place.geometry || !place.geometry.location) return;
-    const loc: Location = {
-      address: place.formatted_address || "",
-      lat: place.geometry.location.lat(),
-      lng: place.geometry.location.lng(),
-    };
-    onSelectLocation(loc, type);
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    type === "pickup" ? setPickupMarker(loc) : setDestMarker(loc);
-  };
-
-  if (loadError) return <div>Error loading map</div>;
-  if (!isLoaded) return <div>Loading map...</div>;
+  function MapClickHandler() {
+    useMapEvents({
+      click(e) {
+        const { lat, lng } = e.latlng;
+        setPosition([lat, lng]);
+        onSelect(lat, lng);
+      },
+    });
+    return null;
+  }
 
   return (
-    <div className="space-y-2">
-      <Autocomplete
-        onPlaceChanged={() => {
-          const input = document.getElementById("pickup") as HTMLInputElement;
-          const place = (window as any).google.maps.places.Autocomplete(input).getPlace();
-          handlePlaceSelect(place, "pickup");
-        }}
-      >
-        <input id="pickup" placeholder="Pickup Address" className="w-full p-2 border rounded-lg" />
-      </Autocomplete>
-
-      <Autocomplete
-        onPlaceChanged={() => {
-          const input = document.getElementById("destination") as HTMLInputElement;
-          const place = (window as any).google.maps.places.Autocomplete(input).getPlace();
-          handlePlaceSelect(place, "destination");
-        }}
-      >
-        <input id="destination" placeholder="Destination Address" className="w-full p-2 border rounded-lg" />
-      </Autocomplete>
-
-      <GoogleMap mapContainerStyle={mapContainerStyle} zoom={12} center={center}>
-        {pickupMarker && <Marker position={{ lat: pickupMarker.lat, lng: pickupMarker.lng }} />}
-        {destMarker && <Marker position={{ lat: destMarker.lat, lng: destMarker.lng }} />}
-      </GoogleMap>
-    </div>
+    <MapContainer
+      center={[23.8103, 90.4125]}
+      zoom={12}
+      style={{ height: "200px", width: "100%", borderRadius: "8px" }}
+    >
+      <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+      {position && <Marker position={position} />}
+      <MapClickHandler />
+    </MapContainer>
   );
 };
+
+export default MapPicker;

@@ -42,12 +42,23 @@ export const createRide = createAsyncThunk<
   }
 );
 
-
 // Cancel existing ride
-export const cancelExistingRide = createAsyncThunk(
+export const cancelExistingRide = createAsyncThunk<
+  Ride,                  // return type on success
+  string,                // argument type (ride id)
+  { rejectValue: string } // type of custom rejection
+>(
   "rider/cancelRide",
-  async (id: string) => rideAPI.cancelRide(id)
+  async (id, { rejectWithValue }) => {
+    try {
+      const response = await rideAPI.cancelRide(id);
+      return response; // return Ride object
+    } catch (err: any) {
+      return rejectWithValue(err.response?.data?.message || "Cancel request failed");
+    }
+  }
 );
+
 
 export const riderSlice = createSlice({
   name: "rider",
