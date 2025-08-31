@@ -12,6 +12,7 @@ import Home from "@/pages/Home";
 import Features from "@/pages/Features";
 import Contact from "@/pages/Contact";
 import FAQ from "@/pages/FAQ";
+import RideDetails from "@/pages/riderPages/rideDetails";
 
 export const router = createBrowserRouter([
   {
@@ -57,8 +58,14 @@ export const router = createBrowserRouter([
   {
     path: "/rider",
     Component: DashboardLayout,
-    children:[...generateRoutes(riderSidebarItems)]
+    children:[...generateRoutes(riderSidebarItems),
+      {
+        path: "rides/:id",
+        Component: RideDetails,
+      },
+    ]
   },
+  
 
   {
     path: "/login",

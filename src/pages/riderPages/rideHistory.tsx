@@ -202,7 +202,7 @@ const RideHistory = () => {
               <td className="p-3 capitalize">{ride.status}</td>
               <td className="p-3 flex gap-2">
                 <button
-                  onClick={() => navigate(`/rides/${ride._id}`)}
+                  onClick={() => navigate(`/rider/rides/${ride._id}`)}
                   className="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600"
                 >
                    <HiEye />
