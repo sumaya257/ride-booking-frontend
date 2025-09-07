@@ -65,8 +65,8 @@ const RideDetails = () => {
                 ride.status === "completed"
                   ? "bg-green-500"
                   : ride.status === "cancelled"
-                  ? "bg-red-500"
-                  : "bg-yellow-500"
+                    ? "bg-red-500"
+                    : "bg-yellow-500"
               }
             >
               {ride.status}
@@ -78,9 +78,10 @@ const RideDetails = () => {
           <div className="flex items-center justify-between mt-4">
             {statusSteps.map((step, i) => (
               <div key={step} className="flex flex-col items-center flex-1">
+                {/* Circle */}
                 <div
                   className={`w-8 h-8 rounded-full flex items-center justify-center text-white 
-                    ${i <= currentIndex ? "bg-green-500" : "bg-gray-600"}`}
+        ${i <= currentIndex ? "bg-green-500" : "bg-gray-600"}`}
                 >
                   {step === "completed" ? (
                     <CheckCircle size={16} />
@@ -92,14 +93,19 @@ const RideDetails = () => {
                     <Loader size={16} />
                   )}
                 </div>
+
+                {/* Label */}
                 <p className="text-xs mt-1 capitalize">{step}</p>
-                {i < statusSteps.length - 1 && (
-                  <div
-                    className={`h-1 w-full ${
-                      i < currentIndex ? "bg-green-500" : "bg-gray-300"
+
+                {/* Border / Connector */}
+                <div
+                  className={`h-1 w-full ${ride.status === "completed"
+                      ? "bg-green-500" // ✅ completed হলে সব border সবুজ
+                      : i < currentIndex
+                        ? "bg-green-500"
+                        : "bg-gray-300"
                     }`}
-                  />
-                )}
+                />
               </div>
             ))}
           </div>
